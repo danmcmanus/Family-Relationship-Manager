@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace FRM.Web.Models
 {
@@ -7,15 +8,12 @@ namespace FRM.Web.Models
         public int Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
+        public string Username { get; set; }
+
+        [DisplayName("Family")]
+        public string BelongsToFamilyName { get; set; }
+        public string FullName { get { return FirstName + " " + LastName; } }
         public DateTime Birthday { get; set; }
-
-        public int FamilyId { get; set; }
-        public virtual Family Family { get; set; }
-
-        public FamilyMember()
-        {
-           
-        }
 
     }
 }

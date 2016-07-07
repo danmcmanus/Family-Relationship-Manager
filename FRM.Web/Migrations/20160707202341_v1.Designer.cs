@@ -8,8 +8,8 @@ using FRM.Web.Data;
 namespace FRM.Web.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20160703055836_initial")]
-    partial class initial
+    [Migration("20160707202341_v1")]
+    partial class v1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -73,7 +73,9 @@ namespace FRM.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
-                    b.Property<string>("FamilyName");
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Username");
 
                     b.HasKey("Id");
 
@@ -85,19 +87,23 @@ namespace FRM.Web.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<string>("BelongsToFamilyName");
+
                     b.Property<DateTime>("Birthday");
 
-                    b.Property<int>("FamilyId");
+                    b.Property<int?>("FamilyId");
 
                     b.Property<string>("FirstName");
 
                     b.Property<string>("LastName");
 
+                    b.Property<string>("Username");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FamilyId");
 
-                    b.ToTable("FamilyMember");
+                    b.ToTable("FamilyMembers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRole", b =>
@@ -209,10 +215,9 @@ namespace FRM.Web.Migrations
 
             modelBuilder.Entity("FRM.Web.Models.FamilyMember", b =>
                 {
-                    b.HasOne("FRM.Web.Models.Family", "Family")
+                    b.HasOne("FRM.Web.Models.Family")
                         .WithMany("FamilyMembers")
-                        .HasForeignKey("FamilyId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("FamilyId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.EntityFrameworkCore.IdentityRoleClaim<string>", b =>

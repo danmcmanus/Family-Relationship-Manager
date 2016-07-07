@@ -16,7 +16,7 @@ namespace FRM.Web.Data
         }
 
         public DbSet<Family> Families { get; set; }
-        //public DbSet<FamilyMember> FamilyMembers { get; set; }
+        public DbSet<FamilyMember> FamilyMembers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -25,8 +25,7 @@ namespace FRM.Web.Data
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
         }
-        //public DbSet<FamilyMember> FamilyMembers { get; set; }
+        
 
-        public DbSet<FamilyMember> FamilyMember { get; set; }
     }
 }

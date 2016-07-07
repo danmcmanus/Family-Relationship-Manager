@@ -1,3 +1,4 @@
+using FRM.Web.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,10 @@ namespace FRM.Web.Contracts
         IQueryable<TEntity> GetPaged(int top = 20, int skip = 0, object orderBy = null, object filter = null);
         void Insert(TEntity entity);
         void Update(TEntity entity);
+        void DeleteFamily(int id);
+        void DeleteFamilyMember(int id);
+
+        Family GetDistinctFamilyWithMembers(int? id);
+        Task<ApplicationUser> GetCurrentUser(string id);
     }
 }

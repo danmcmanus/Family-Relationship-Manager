@@ -41,7 +41,8 @@ namespace FRM.Web.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    FamilyName = table.Column<string>(nullable: true)
+                    Name = table.Column<string>(nullable: true),
+                    Username = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -118,25 +119,26 @@ namespace FRM.Web.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "FamilyMember",
+                name: "FamilyMembers",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    BelongsToFamilyName = table.Column<string>(nullable: true),
                     Birthday = table.Column<DateTime>(nullable: false),
-                    FamilyId = table.Column<int>(nullable: false),
+                    FamilyId = table.Column<int>(nullable: true),
                     FirstName = table.Column<string>(nullable: true),
                     LastName = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FamilyMember", x => x.Id);
+                    table.PrimaryKey("PK_FamilyMembers", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_FamilyMember_Families_FamilyId",
+                        name: "FK_FamilyMembers_Families_FamilyId",
                         column: x => x.FamilyId,
                         principalTable: "Families",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -196,8 +198,8 @@ namespace FRM.Web.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_FamilyMember_FamilyId",
-                table: "FamilyMember",
+                name: "IX_FamilyMembers_FamilyId",
+                table: "FamilyMembers",
                 column: "FamilyId");
 
             migrationBuilder.CreateIndex(
@@ -234,7 +236,7 @@ namespace FRM.Web.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "FamilyMember");
+                name: "FamilyMembers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");

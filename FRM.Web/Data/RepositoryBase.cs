@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FRM.Web.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace FRM.Web.Data
 {
@@ -13,11 +15,13 @@ namespace FRM.Web.Data
     {
         internal ApplicationDbContext context;
         internal DbSet<TEntity> dbSet;
+        internal UserManager<ApplicationUser> _userManager;
 
-        public RepositoryBase(ApplicationDbContext context)
+        public RepositoryBase(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
             this.context = context;
             this.dbSet = context.Set<TEntity>();
+            this._userManager = userManager;
         }
 
         public virtual TEntity GetById(int? id)
@@ -73,8 +77,37 @@ namespace FRM.Web.Data
 
         public virtual void Delete(object id)
         {
-            //TEntity entity = dbSet.Find(id);
             throw new NotImplementedException();
+
+        }
+
+        public virtual void DeleteFamily(int id)
+        {
+            var model = context.Families.FirstOrDefault(f => f.Id == id);
+            context.Families.Remove(model);
+
+        }
+
+        public virtual Family GetDistinctFamilyWithMembers(int? id)
+        {
+            IEnumerable<FamilyMember> members = new List<FamilyMember>();
+            var model = context.Families.FirstOrDefault(f => f.Id == id);
+            members = (from f in context.FamilyMembers
+                       where f.Username == model.Username
+                       select f).ToList();
+
+            foreach (var item in members)
+            {
+                model.FamilyMembers.Add(item);
+            }
+
+            return model;
+        }
+
+        public virtual void DeleteFamilyMember(int id)
+        {
+            var model = context.FamilyMembers.FirstOrDefault(f => f.Id == id);
+            context.FamilyMembers.Remove(model);
         }
 
         public virtual void Commit()
@@ -87,5 +120,10 @@ namespace FRM.Web.Data
             context.Dispose();
         }
 
+        public async Task<ApplicationUser> GetCurrentUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            return user;
+        }
     }
 }
